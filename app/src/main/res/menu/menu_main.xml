@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".MainActivity">
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_photo_state"
+            android:checked="true"
+            android:orderInCategory="80"
+            android:title="@string/photo_state"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/action_time_state"
+            android:orderInCategory="80"
+            android:title="@string/time_state"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/action_position_state"
+            android:orderInCategory="80"
+            android:title="@string/position_state"
+            app:showAsAction="never"/>
+    </group>
+</menu>
