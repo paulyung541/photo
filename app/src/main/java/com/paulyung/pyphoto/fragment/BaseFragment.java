@@ -14,22 +14,18 @@ import android.view.ViewGroup;
  */
 
 public class BaseFragment extends Fragment {
-    private View mRootView;
+    protected View mRootView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = inflater.inflate(getLayoutId(), container, false);
-        if (mRootView != null)
+        if (mRootView != null) {
+            initView();
             return mRootView;
+        }
         else
             return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        initView();
     }
 
     protected View findViewById(@IdRes int id) {
@@ -41,6 +37,5 @@ public class BaseFragment extends Fragment {
     }
 
     protected void initView() {
-
     }
 }
