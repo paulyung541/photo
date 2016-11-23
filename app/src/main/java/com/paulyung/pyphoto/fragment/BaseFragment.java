@@ -14,7 +14,7 @@ import android.view.ViewGroup;
  */
 
 public class BaseFragment extends Fragment {
-    protected View mRootView;
+    private View mRootView;
 
     @Nullable
     @Override
@@ -23,8 +23,7 @@ public class BaseFragment extends Fragment {
         if (mRootView != null) {
             initView();
             return mRootView;
-        }
-        else
+        } else
             return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -37,5 +36,21 @@ public class BaseFragment extends Fragment {
     }
 
     protected void initView() {
+    }
+
+    /**
+     * 删除文件监听，由Activity调用
+     */
+    public void onFileDelete() {
+
+    }
+
+    /**
+     * 返回键监听，由Activity调用
+     *
+     * @return 当为false时，Activity则不会响应Fragment的返回按钮
+     */
+    public boolean onBackPressed() {
+        return false;
     }
 }

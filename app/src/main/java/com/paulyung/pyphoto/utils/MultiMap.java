@@ -56,6 +56,37 @@ public class MultiMap<K, V> {
             return 0;
     }
 
+    public boolean contains(V value) {
+        boolean result = false;
+        Set<K> set = map.keySet();
+        for (K key : set) {
+            List<V> list = map.get(key);
+            if (list.contains(value))
+                result = true;
+        }
+        return result;
+    }
+
+    //拥有该value的第某一个Key，如果保证一个value只对应一个Key的话，则能唯一找到那个Key
+    //若找不到则为null
+    public K oneKey(V value) {
+        K resultkey = null;
+        Set<K> set = map.keySet();
+        for (K key : set) {
+            List<V> list = map.get(key);
+            if (list.contains(value)) {
+                resultkey = key;
+                break;
+            }
+        }
+        return resultkey;
+    }
+
+    public K remove(K key) {
+        map.remove(key);
+        return key;
+    }
+
     public V remove(K key, V value) {
         Set<K> set = map.keySet();
         if (set.contains(key)) {

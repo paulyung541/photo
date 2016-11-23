@@ -3,22 +3,26 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".MainActivity">
+    <item
+        android:id="@+id/delete"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:showAsAction="always"
+        android:title="@string/delete_menu"/>
+
     <group
+        android:id="@+id/group"
         android:checkableBehavior="single">
         <item
             android:id="@+id/action_photo_state"
             android:checked="true"
-            android:orderInCategory="80"
             android:title="@string/photo_state"
             app:showAsAction="never"/>
         <item
             android:id="@+id/action_time_state"
-            android:orderInCategory="80"
             android:title="@string/time_state"
             app:showAsAction="never"/>
         <item
             android:id="@+id/action_position_state"
-            android:orderInCategory="80"
             android:title="@string/position_state"
             app:showAsAction="never"/>
     </group>

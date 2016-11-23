@@ -27,6 +27,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     private View mFooterView;
 
     private OnItemClickListener mItemClickListener;
+    private OnItemLongClickListener onItemLongClickListener;
 
     public BaseAdapter(Context context, List<T> datas) {
         mContext = context;
@@ -44,12 +45,13 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         public GridSpanSizeLookup(int normalSize) {
             mNormalSize = normalSize;
         }
+
         @Override
         public int getSpanSize(int position) {
             if (mHeaderView != null && position == 0)
-                    return mNormalSize;
+                return mNormalSize;
             if (mFooterView != null && position - mData.size() - 1 >= 0)
-                    return mNormalSize;
+                return mNormalSize;
             return 1;
         }
     }
@@ -98,7 +100,18 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
                     int p = viewHolder.getAdapterPosition();
                     if (mHeaderView != null)
                         p -= 1;
-                    mItemClickListener.onItemClick(p);
+                    mItemClickListener.onItemClick(v, p);
+                }
+            });
+        }
+        if (onItemLongClickListener != null) {
+            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int p = viewHolder.getAdapterPosition();
+                    if (mHeaderView != null)
+                        p -= 1;
+                    return onItemLongClickListener.onItemLongClick(v, p);
                 }
             });
         }
@@ -117,6 +130,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
             holder.setData(getItem(position - 1));
         else
             holder.setData(getItem(position));
+        onBindView(holder, position);
+    }
+
+    protected void onBindView(BaseViewHolder holder, int position) {
     }
 
     public T getItem(int position) {
@@ -139,6 +156,16 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         return mData.size();
     }
 
+    /**
+     * 刷新某个item的界面
+     *
+     * @param position position
+     */
+    public synchronized void update(int position) {
+        if (getItem(position) != null)
+            notifyItemChanged(position);
+    }
+
     public synchronized void add(T data) {
         if (mData == null)
             mData = new ArrayList<>();
@@ -155,17 +182,21 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         if (mData == null)
             mData = new ArrayList<>();
         if (dataList != null && !dataList.isEmpty()) {
-            mData.addAll(dataList);
             int position = getDataSize();
-            if (mHeaderView == null)
-                position -= 1;
+            if (mHeaderView != null)
+                position += 1;
+            mData.addAll(dataList);
             notifyItemRangeInserted(position, dataList.size());
         }
     }
 
     public synchronized void clear() {
-        if (mData != null && mData.size() != 0)
+        if (mData != null && mData.size() != 0) {
+            int size = mData.size();
             mData.clear();
+            int p = mHeaderView == null ? 0 : 1;
+            notifyItemRangeRemoved(p, size);
+        }
     }
 
     @Override
@@ -181,6 +212,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
 
     /**
      * 添加头部
+     *
      * @param id
      */
     public void addHeader(@LayoutRes int id) {
@@ -189,18 +221,27 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
 
     /**
      * 添加底部
+     *
      * @param id
      */
     public void addFooter(@LayoutRes int id) {
         mFooterView = LayoutInflater.from(mContext).inflate(id, null, false);
     }
 
-    interface OnItemClickListener {
-        void onItemClick(int position);
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener l) {
         mItemClickListener = l;
+    }
+
+    public interface OnItemLongClickListener {
+        boolean onItemLongClick(View v, int position);
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener l) {
+        onItemLongClickListener = l;
     }
 
     private static class SpViewHolder extends BaseViewHolder {
