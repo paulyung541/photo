@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -23,6 +21,7 @@ import com.paulyung.pyphoto.callback.CoverOperate;
 import com.paulyung.pyphoto.callback.OnPhotoMsgBackListener;
 import com.paulyung.pyphoto.callback.SelectStateCheck;
 import com.paulyung.pyphoto.utils.DBHelper;
+import com.paulyung.pyphoto.wrapper.RcyView;
 
 /**
  * Created by yang on 2016/11/15.
@@ -90,10 +89,7 @@ public class PhotoStateFragment extends BaseFragment implements OnPhotoMsgBackLi
     @Override
     protected void initView() {
         mRyView = (RecyclerView) findViewById(R.id.ry_view);
-        mRyView.setHasFixedSize(true);
-        RecyclerView.ItemAnimator animator = new DefaultItemAnimator();
-        animator.setChangeDuration(0);//解决刷新使用默认item动画闪屏问题
-        mRyView.setItemAnimator(animator);
+        RcyView.normalInit(mRyView);
         adapter = new PhotoStateAdapter(getActivity(), this);
         //普通按
         adapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
@@ -134,9 +130,7 @@ public class PhotoStateFragment extends BaseFragment implements OnPhotoMsgBackLi
                 return res;
             }
         });
-        GridLayoutManager manager = new GridLayoutManager(getContext(), 2);
-        manager.setSpanSizeLookup(adapter.getGridLookUp(2));
-        mRyView.setLayoutManager(manager);
+        RcyView.setGridLayoutManager(mRyView, adapter, 2);
         mRyView.setAdapter(adapter);
     }
 
@@ -146,8 +140,9 @@ public class PhotoStateFragment extends BaseFragment implements OnPhotoMsgBackLi
         for (int i = 0; i < adapter.getDataSize(); ++i) {
             adapter.getItem(i).setShowCheckBox(false);
             adapter.getItem(i).setCheck(false);
-            adapter.notifyDataSetChanged();
         }
+        if (adapter.getDataSize() != 0)
+            adapter.notifyDataSetChanged();
         return true;
     }
 

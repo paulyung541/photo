@@ -140,6 +140,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         return mData.get(position);
     }
 
+    public List<T> getAllData() {
+        return mData;
+    }
+
     @Override
     public int getItemCount() {
         if (mData == null)

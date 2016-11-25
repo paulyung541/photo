@@ -1,13 +1,13 @@
 package com.paulyung.pyphoto.adapter;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.view.ViewGroup;
 
 import com.paulyung.pyphoto.R;
 import com.paulyung.pyphoto.adapter.viewholder.BaseViewHolder;
 import com.paulyung.pyphoto.adapter.viewholder.PhotoViewHolder;
 import com.paulyung.pyphoto.bean.PhotoCover;
-import com.paulyung.pyphoto.fragment.PhotoStateFragment;
 
 /**
  * Created by yang on 2016/11/21.
@@ -15,9 +15,9 @@ import com.paulyung.pyphoto.fragment.PhotoStateFragment;
  */
 
 public class PhotoStateAdapter extends BaseAdapter<PhotoCover> {
-    private PhotoStateFragment fragment;
+    private Fragment fragment;
 
-    public PhotoStateAdapter(Context context, PhotoStateFragment fragment) {
+    public PhotoStateAdapter(Context context, Fragment fragment) {
         super(context);
         this.fragment = fragment;
     }

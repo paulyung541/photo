@@ -7,6 +7,7 @@ import com.paulyung.pyphoto.bean.PhotoCover;
 import com.paulyung.pyphoto.bean.PhotoMsg;
 import com.paulyung.pyphoto.utils.MultiMap;
 import com.paulyung.pyphoto.utils.PYLog;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,13 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         _INSTANCE = this;
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+
         PYLog.setDebug(BuildConfig.DEBUG);
         mPhotoMsg = new MultiMap<>();
         mCovers = new ArrayList<>();

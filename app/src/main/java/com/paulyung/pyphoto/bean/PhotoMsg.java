@@ -14,6 +14,9 @@ public class PhotoMsg {
     private String lat;//纬度
     private String city;
 
+    private boolean isCheck;//是否选中状态(PS：此为界面信息，放在这里方便OnBindView里根据position进行设置viewholder)
+    private boolean isShowCheckBox;//是否显示CheckBox
+
     public PhotoMsg(String absolutePath, String simpleName,String parentName, String time, String lon, String lat, String city) {
         this.absolutePath = absolutePath;
         this.simpleName = simpleName;
@@ -78,5 +81,21 @@ public class PhotoMsg {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+    }
+
+    public boolean isShowCheckBox() {
+        return isShowCheckBox;
+    }
+
+    public void setShowCheckBox(boolean showCheckBox) {
+        isShowCheckBox = showCheckBox;
     }
 }

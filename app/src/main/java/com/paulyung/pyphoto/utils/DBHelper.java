@@ -1,5 +1,6 @@
 package com.paulyung.pyphoto.utils;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,7 +10,6 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 
 import com.paulyung.pyphoto.BaseApplication;
-import com.paulyung.pyphoto.activity.MainActivity;
 import com.paulyung.pyphoto.bean.PhotoCover;
 import com.paulyung.pyphoto.bean.PhotoMsg;
 import com.paulyung.pyphoto.callback.OnPhotoMsgBackListener;
@@ -104,7 +104,7 @@ public class DBHelper {
     }
 
 
-    public static void updateFileByPath(MainActivity activity, List<String> filePathList) {
+    public static void updateFileByPath(Activity activity, List<String> filePathList) {
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         for (int i = 0; i < filePathList.size(); ++i) {
             Uri data = Uri.fromFile(new File(filePathList.get(i)));
@@ -112,5 +112,4 @@ public class DBHelper {
             activity.sendBroadcast(intent);
         }
     }
-    //// TODO: 2016/11/23 要解决的问题是：怎样在删除原图的同时，删掉数据库中的缩略图。扫描一个目录
 }

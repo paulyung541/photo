@@ -45,7 +45,9 @@ public class MainViewActivity extends BaseActivity implements SelectStateCheck {
 
     @Override
     protected Toolbar getInitToolbar() {
-        return (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getResources().getString(R.string.my_photo));
+        return toolbar;
     }
 
     @Override

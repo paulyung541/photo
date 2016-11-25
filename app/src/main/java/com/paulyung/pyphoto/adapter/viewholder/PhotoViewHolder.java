@@ -42,10 +42,12 @@ public class PhotoViewHolder extends BaseViewHolder<PhotoCover> {
 
     @Override
     public void setData(PhotoCover data) {
+        int picWidth = Math.min(imageView.getLayoutParams().height, 200);
+
         Glide.with(fragment)
                 .load(data.getCoverAbsolutePath())
-                .placeholder(R.mipmap.loadding)
-                .override(200, 200)
+                .placeholder(R.mipmap.error)
+                .override(picWidth, picWidth)
                 .centerCrop()
                 .into(imageView);
         textView.setText(data.getCoverName() + '(' + data.getSize() + ')');
@@ -54,7 +56,7 @@ public class PhotoViewHolder extends BaseViewHolder<PhotoCover> {
             checkBox.setChecked(data.isCheck());
         } else {
             checkBox.setChecked(false);
-            checkBox.setVisibility(View.GONE);
+            checkBox.setVisibility(View.INVISIBLE);
         }
     }
 }

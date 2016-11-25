@@ -6,14 +6,31 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="DetailTheme" parent="AppTheme">
         <!--背景透明-->
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
         <!--无进入动画-->
         <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+    <style name="ImageWhathTheme" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@null</item><!--无进入动画-->
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- 控件Style -->
+    <style name="CommonToolBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?android:attr/colorPrimary</item>
+        <item name="android:paddingTop">@dimen/toolbar_padding_top</item>
+        <item name="android:minHeight">?android:attr/actionBarSize</item>
+        <item name="titleTextColor">@color/gray1</item>
     </style>
 
 </resources>
