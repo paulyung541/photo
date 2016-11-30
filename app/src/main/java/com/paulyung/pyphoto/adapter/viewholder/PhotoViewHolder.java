@@ -20,11 +20,13 @@ import com.paulyung.pyphoto.utils.UIHelper;
  */
 //todo:图片中心显示问题，待解决
 public class PhotoViewHolder extends BaseViewHolder<PhotoCover> {
-    public CardView cardView;
-    public ImageView imageView;
-    public TextView textView;
-    public CheckBox checkBox;
-    Fragment fragment;
+    public static final int SPAN_COUNT = 2;
+
+    private CardView cardView;
+    private ImageView imageView;
+    private TextView textView;
+    private CheckBox checkBox;
+    private Fragment fragment;
 
     public PhotoViewHolder(Fragment fragment, ViewGroup parent, int id) {
         super(parent, id);
@@ -36,18 +38,18 @@ public class PhotoViewHolder extends BaseViewHolder<PhotoCover> {
 
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imageView.getLayoutParams();
         params.height = (UIHelper.getScreenWidth() - parent.getPaddingLeft() - parent.getPaddingRight() -
-                (int) UIHelper.dpToPx(10)) / 2;//限制高度，让它等于item的宽度
+                (int) UIHelper.dpToPx(10)) / SPAN_COUNT;//限制高度，让它等于item的宽度
         imageView.setLayoutParams(params);
     }
 
     @Override
     public void setData(PhotoCover data) {
-        int picWidth = Math.min(imageView.getLayoutParams().height, 200);
+        int maxSize = Math.min(imageView.getLayoutParams().height, 200);
 
-        Glide.with(fragment)
+        Glide.with(getContext())
                 .load(data.getCoverAbsolutePath())
                 .placeholder(R.mipmap.error)
-                .override(picWidth, picWidth)
+                .override(maxSize, maxSize)
                 .centerCrop()
                 .into(imageView);
         textView.setText(data.getCoverName() + '(' + data.getSize() + ')');

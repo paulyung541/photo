@@ -1,11 +1,13 @@
 package com.paulyung.pyphoto.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by yang on 2016/11/17.
  * paulyung@outlook.com
  */
 
-public class PhotoMsg {
+public class PhotoMsg implements Serializable {
     private String absolutePath;
     private String simpleName;
     private String parentName;//目录名（只是名字）

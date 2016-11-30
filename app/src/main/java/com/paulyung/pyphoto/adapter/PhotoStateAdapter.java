@@ -27,4 +27,14 @@ public class PhotoStateAdapter extends BaseAdapter<PhotoCover> {
         //传入fragment，让Glide加载跟随fragment周期
         return new PhotoViewHolder(fragment, parent, R.layout.item_photo_state);
     }
+
+    //将CheckBox隐藏，并都置为false
+    public void clearCheckBoxStateAll() {
+        for (int i = 0; i < getDataSize(); ++i) {
+            getItem(i).setShowCheckBox(false);
+            getItem(i).setCheck(false);
+        }
+        if (getDataSize() != 0)
+            notifyDataSetChanged();
+    }
 }

@@ -145,7 +145,10 @@ public class PhotoListActivity extends BaseActivity implements SelectStateCheck,
                     public void run() {
                         dialog.dismiss();
                         setSelectState(false);
-                        List<PhotoMsg> list = BaseApplication.getInstance().getPhotoMsg().get(title);
+                        String tmpStr = title;
+                        if (tmpStr.equals("相机"))
+                            tmpStr = "Camera";
+                        List<PhotoMsg> list = BaseApplication.getInstance().getPhotoMsg().get(tmpStr);
                         for (int i = 0; i < list.size(); ++i) {
                             for (int j = 0; j < deleteList.size(); ++j) {
                                 if (list.get(i).getAbsolutePath().equals(deleteList.get(j))) {

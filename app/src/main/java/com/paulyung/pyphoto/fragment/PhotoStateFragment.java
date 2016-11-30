@@ -17,6 +17,7 @@ import com.paulyung.pyphoto.R;
 import com.paulyung.pyphoto.activity.PhotoListActivity;
 import com.paulyung.pyphoto.adapter.BaseAdapter;
 import com.paulyung.pyphoto.adapter.PhotoStateAdapter;
+import com.paulyung.pyphoto.adapter.viewholder.PhotoViewHolder;
 import com.paulyung.pyphoto.callback.CoverOperate;
 import com.paulyung.pyphoto.callback.OnPhotoMsgBackListener;
 import com.paulyung.pyphoto.callback.SelectStateCheck;
@@ -130,19 +131,14 @@ public class PhotoStateFragment extends BaseFragment implements OnPhotoMsgBackLi
                 return res;
             }
         });
-        RcyView.setGridLayoutManager(mRyView, adapter, 2);
+        RcyView.setGridLayoutManager(mRyView, adapter, PhotoViewHolder.SPAN_COUNT);
         mRyView.setAdapter(adapter);
     }
 
     //选照片状态时点击返回键
     @Override
     public boolean onBackPressed() {
-        for (int i = 0; i < adapter.getDataSize(); ++i) {
-            adapter.getItem(i).setShowCheckBox(false);
-            adapter.getItem(i).setCheck(false);
-        }
-        if (adapter.getDataSize() != 0)
-            adapter.notifyDataSetChanged();
+        adapter.clearCheckBoxStateAll();
         return true;
     }
 

@@ -10,6 +10,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.paulyung.pyphoto.PYGlideModule"
+            android:value="GlideModule" /> <!-- Glide初始化配置 -->
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
