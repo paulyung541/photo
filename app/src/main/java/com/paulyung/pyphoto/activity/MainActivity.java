@@ -73,7 +73,7 @@ public class MainActivity extends MainViewActivity implements CoverOperate {
             protected Void doInBackground(Void... params) {
                 deleteList = FileHelper.deletePictures(mSelectCovers);
                 //ACTION_MEDIA_SCANNER_SCAN_FILE 发这个广播只会扫描单个文件，不能是dir
-                DBHelper.updateFileByPath(MainActivity.this, deleteList);
+                DBHelper.updateFileByPath(deleteList);
                 return null;
             }
 

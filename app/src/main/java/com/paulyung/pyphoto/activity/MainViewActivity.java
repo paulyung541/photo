@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.paulyung.pyphoto.BaseApplication;
 import com.paulyung.pyphoto.R;
 import com.paulyung.pyphoto.callback.SelectStateCheck;
 import com.paulyung.pyphoto.fragment.BaseFragment;
@@ -75,7 +74,6 @@ public class MainViewActivity extends BaseActivity implements SelectStateCheck {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (isCheckState) {
-            BaseApplication.getInstance().showToast("删除");
             onDeletePressed();//执行删除
         } else {
             item.setChecked(true);

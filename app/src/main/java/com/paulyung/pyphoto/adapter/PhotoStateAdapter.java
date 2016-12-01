@@ -23,7 +23,7 @@ public class PhotoStateAdapter extends BaseAdapter<PhotoCover> {
     }
 
     @Override
-    protected BaseViewHolder createHolder(ViewGroup parent) {
+    protected BaseViewHolder createHolder(ViewGroup parent, int type) {
         //传入fragment，让Glide加载跟随fragment周期
         return new PhotoViewHolder(fragment, parent, R.layout.item_photo_state);
     }

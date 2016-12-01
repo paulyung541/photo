@@ -1,7 +1,7 @@
 package com.paulyung.pyphoto.utils;
 
-import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.ExifInterface;
@@ -16,6 +16,7 @@ import com.paulyung.pyphoto.callback.OnPhotoMsgBackListener;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -36,39 +37,62 @@ public class DBHelper {
             @Override
             protected Void doInBackground(Void... params) {
                 MultiMap<String, PhotoMsg> map = BaseApplication.getInstance().getPhotoMsg();
+                List<PhotoMsg> timeList = BaseApplication.getInstance().getTimeList();
+                LinkedList<PhotoMsg> tmpTimeList = new LinkedList<>();
                 if (!map.isEmpty())//每次清空
                     map.clear();
 
                 Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
                 ContentResolver mContentResolver = BaseApplication.getInstance().getContentResolver();
-                //只查询jpeg和png的图片
+                //查询jpeg，png和gif的图片
                 Cursor cursor = mContentResolver.query(mImageUri, null,
                         MediaStore.Images.Media.MIME_TYPE + "=? or "
                                 + MediaStore.Images.Media.MIME_TYPE + "=?",
                         new String[]{"image/jpeg", "image/png"}, MediaStore.Images.Media.DATE_MODIFIED);
                 if (cursor == null)
                     return null;
+
+                //查询Media数据库取出Photo信息
                 while (cursor.moveToNext()) {
                     String absolutePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     File photoFile = new File(absolutePath);
+                    if (!photoFile.exists()) {
+                        //如果从数据库查到，却发现无此文件，就应当从数据库中删除该记录以及缩略图
+                        deleteImageFromDatabase(absolutePath);
+                        continue;
+                    }
+
                     String time = null;
                     String lon = null;
                     String lat = null;
                     String city = null;
                     try {
                         ExifInterface exif = new ExifInterface(absolutePath);
-                        time = exif.getAttribute(ExifInterface.TAG_DATETIME);
                         lon = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
                         lat = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    time = StringUtils.getTimeByMilliseconds(photoFile.lastModified());//文件修改时间
+
                     PhotoMsg msg = new PhotoMsg(absolutePath, photoFile.getName(),
                             photoFile.getParentFile().getName(), time, lon, lat, city);
-
+                    if (time != null)//没有时间信息的就不显示出来了
+                        tmpTimeList.addFirst(msg);
                     map.put(photoFile.getParentFile().getName(), msg);
                 }
                 cursor.close();
+
+                //插入时间头
+                String preTime = "";
+                for (PhotoMsg msg : tmpTimeList) {
+                    if (!StringUtils.getSubString(0, 10, msg.getTime()).equals(preTime)) {
+                        timeList.add(new PhotoMsg(null, null, null, StringUtils.getSubString(0, 10,
+                                StringUtils.getSubString(0, 10, msg.getTime())), null, null, null));
+                    }
+                    timeList.add(msg);
+                    preTime = StringUtils.getSubString(0, 10, msg.getTime());
+                }
 
                 List<PhotoCover> list = BaseApplication.getInstance().getCovers();
                 if (!list.isEmpty())
@@ -103,13 +127,24 @@ public class DBHelper {
         }.execute();
     }
 
-
-    public static void updateFileByPath(Activity activity, List<String> filePathList) {
+    public static void updateFileByPath(List<String> filePathList) {
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         for (int i = 0; i < filePathList.size(); ++i) {
             Uri data = Uri.fromFile(new File(filePathList.get(i)));
             intent.setData(data);
-            activity.sendBroadcast(intent);
+            BaseApplication.getInstance().sendBroadcast(intent);
+        }
+    }
+
+    public static void deleteImageFromDatabase(String imgPath) {
+        ContentResolver resolver = BaseApplication.getInstance().getContentResolver();
+        Cursor cursor = MediaStore.Images.Media.query(resolver, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media._ID}, MediaStore.Images.Media.DATA + "=?",
+                new String[]{imgPath}, null);
+        if (cursor.moveToFirst()) {
+            long id = cursor.getLong(0);
+            Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            Uri uri = ContentUris.withAppendedId(contentUri, id);
+            BaseApplication.getInstance().getContentResolver().delete(uri, null, null);
         }
     }
 }

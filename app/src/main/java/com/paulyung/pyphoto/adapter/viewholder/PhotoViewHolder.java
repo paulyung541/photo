@@ -48,7 +48,7 @@ public class PhotoViewHolder extends BaseViewHolder<PhotoCover> {
 
         Glide.with(getContext())
                 .load(data.getCoverAbsolutePath())
-                .placeholder(R.mipmap.error)
+                .error(R.mipmap.error)
                 .override(maxSize, maxSize)
                 .centerCrop()
                 .into(imageView);

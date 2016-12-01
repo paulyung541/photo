@@ -2,9 +2,12 @@ package com.paulyung.pyphoto.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.widget.TextView;
+import android.support.v7.widget.RecyclerView;
 
+import com.paulyung.pyphoto.BaseApplication;
 import com.paulyung.pyphoto.R;
+import com.paulyung.pyphoto.adapter.TimeStateAdapter;
+import com.paulyung.pyphoto.wrapper.RcyView;
 
 /**
  * Created by yang on 2016/11/15.
@@ -12,6 +15,11 @@ import com.paulyung.pyphoto.R;
  */
 
 public class TimeStateFragment extends BaseFragment {
+    private RecyclerView mRcyView;
+    private TimeStateAdapter mAdapter;
+
+    public TimeStateFragment() {
+    }
 
     public static Fragment getInstance(Bundle bundle) {
         Fragment fragment = new TimeStateFragment();
@@ -26,7 +34,10 @@ public class TimeStateFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-        TextView textView = (TextView) findViewById(R.id.text);
-        textView.setText("time_state_fragment");
+        mRcyView = (RecyclerView) findViewById(R.id.recyclerview);
+        RcyView.normalInit(mRcyView);
+        mAdapter = new TimeStateAdapter(getActivity(), BaseApplication.getInstance().getTimeList());
+        mRcyView.setAdapter(mAdapter);
+        RcyView.setGridLayoutManager(mRcyView, mAdapter, 3);
     }
 }

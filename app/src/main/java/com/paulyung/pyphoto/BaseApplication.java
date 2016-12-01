@@ -7,7 +7,6 @@ import com.paulyung.pyphoto.bean.PhotoCover;
 import com.paulyung.pyphoto.bean.PhotoMsg;
 import com.paulyung.pyphoto.utils.MultiMap;
 import com.paulyung.pyphoto.utils.PYLog;
-import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +21,7 @@ public class BaseApplication extends Application {
 
     private MultiMap<String, PhotoMsg> mPhotoMsg;
     private List<PhotoCover> mCovers;
+    private List<PhotoMsg> mTimeList;//按照时间排列的照片,会插入时间头，时间头是只带时间信息的PhotoMsg
 
     public synchronized static BaseApplication getInstance() {
         return _INSTANCE;
@@ -31,16 +31,11 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         _INSTANCE = this;
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
 
         PYLog.setDebug(BuildConfig.DEBUG);
         mPhotoMsg = new MultiMap<>();
         mCovers = new ArrayList<>();
+        mTimeList = new ArrayList<>();
     }
 
     public void showToast(String msg) {
@@ -49,6 +44,7 @@ public class BaseApplication extends Application {
 
     /**
      * 获取所有照片
+     *
      * @return MutilMap < 目录,照片 >
      */
     public MultiMap<String, PhotoMsg> getPhotoMsg() {
@@ -72,5 +68,9 @@ public class BaseApplication extends Application {
      */
     public List<PhotoCover> getCovers() {
         return mCovers;
+    }
+
+    public List<PhotoMsg> getTimeList() {
+        return mTimeList;
     }
 }

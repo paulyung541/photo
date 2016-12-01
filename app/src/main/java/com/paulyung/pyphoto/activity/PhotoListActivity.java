@@ -133,7 +133,7 @@ public class PhotoListActivity extends BaseActivity implements SelectStateCheck,
             protected Void doInBackground(Void... params) {
                 deleteList = FileHelper.deleteFiles(mSelectPhotos);
                 //ACTION_MEDIA_SCANNER_SCAN_FILE 发这个广播只会扫描单个文件，不能是dir
-                DBHelper.updateFileByPath(PhotoListActivity.this, deleteList);
+                DBHelper.updateFileByPath(deleteList);
                 return null;
             }
 

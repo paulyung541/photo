@@ -40,7 +40,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
 
     //GridLayoutManager构造函数传入 数据每行的item个数
     public class GridSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
-        private int mNormalSize;
+        protected int mNormalSize;
 
         public GridSpanSizeLookup(int normalSize) {
             mNormalSize = normalSize;
@@ -60,7 +60,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         return new GridSpanSizeLookup(normalSize);
     }
 
-    protected abstract BaseViewHolder createHolder(ViewGroup parent);
+    protected abstract BaseViewHolder createHolder(ViewGroup parent, int viewType);
 
     private View createSpViewByType(int viewType) {
         if (mHeaderView != null && mHeaderView.hashCode() == viewType) {
@@ -92,7 +92,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         if (view != null)
             return new SpViewHolder(view);
 
-        final BaseViewHolder viewHolder = createHolder(parent);
+        final BaseViewHolder viewHolder = createHolder(parent, viewType);
         if (mItemClickListener != null) {
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

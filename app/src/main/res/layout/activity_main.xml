@@ -15,8 +15,6 @@
 
     <FrameLayout
         android:id="@+id/lay_container"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>
