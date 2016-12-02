@@ -6,10 +6,10 @@ package com.paulyung.pyphoto.callback;
  * 相册操作
  */
 
-public interface CoverOperate {
+public interface FileOperate {
     /**
-     * @param imgFiles 选中相册的绝对路径
+     * @param file 文件的绝对路径
      * @return 如果选中的照片已经选过了，则返回false，否则返回true
      */
-    boolean addCover(String imgFiles);//添加选中的相册
+    boolean addFile(String file);//添加选中的文件
 }

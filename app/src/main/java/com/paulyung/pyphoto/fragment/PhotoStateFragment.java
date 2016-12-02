@@ -18,7 +18,7 @@ import com.paulyung.pyphoto.activity.PhotoListActivity;
 import com.paulyung.pyphoto.adapter.BaseAdapter;
 import com.paulyung.pyphoto.adapter.PhotoStateAdapter;
 import com.paulyung.pyphoto.adapter.viewholder.PhotoViewHolder;
-import com.paulyung.pyphoto.callback.CoverOperate;
+import com.paulyung.pyphoto.callback.FileOperate;
 import com.paulyung.pyphoto.callback.OnPhotoMsgBackListener;
 import com.paulyung.pyphoto.callback.SelectStateCheck;
 import com.paulyung.pyphoto.utils.DBHelper;
@@ -33,7 +33,7 @@ public class PhotoStateFragment extends BaseFragment implements OnPhotoMsgBackLi
 
     private RecyclerView mRyView;
     private PhotoStateAdapter adapter;
-    private CoverOperate mCoverOperate;
+    private FileOperate mFileOperate;
     private SelectStateCheck mCheckState;
 
     public PhotoStateFragment() {
@@ -53,19 +53,19 @@ public class PhotoStateFragment extends BaseFragment implements OnPhotoMsgBackLi
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof CoverOperate && context instanceof SelectStateCheck) {
-            mCoverOperate = (CoverOperate) context;
+        if (context instanceof FileOperate && context instanceof SelectStateCheck) {
+            mFileOperate = (FileOperate) context;
             mCheckState = (SelectStateCheck) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement CoverOperate or SelectStateCheck interface");
+                    + " must implement FileOperate or SelectStateCheck interface");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mCoverOperate = null;
+        mFileOperate = null;
         mCheckState = null;
     }
 
@@ -97,7 +97,7 @@ public class PhotoStateFragment extends BaseFragment implements OnPhotoMsgBackLi
             @Override
             public void onItemClick(View v, int position) {
                 if (mCheckState.getSelectState()) {//检查是否是选照片状态
-                    if (mCoverOperate.addCover(adapter.getItem(position).getCover())) {
+                    if (mFileOperate.addFile(adapter.getItem(position).getCover())) {
                         //如果添加成功，则显示CheckBox为打勾状态
                         adapter.getItem(position).setCheck(true);
                     } else {
@@ -124,7 +124,7 @@ public class PhotoStateFragment extends BaseFragment implements OnPhotoMsgBackLi
                         adapter.getItem(i).setShowCheckBox(true);
                     }
                     adapter.getItem(position).setCheck(true);
-                    mCoverOperate.addCover(adapter.getItem(position).getCover());
+                    mFileOperate.addFile(adapter.getItem(position).getCover());
                     adapter.notifyDataSetChanged();
                     res = true;
                 }

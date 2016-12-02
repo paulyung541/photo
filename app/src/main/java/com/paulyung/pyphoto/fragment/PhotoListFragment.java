@@ -15,7 +15,7 @@ import com.paulyung.pyphoto.adapter.BaseAdapter;
 import com.paulyung.pyphoto.adapter.PhotoListAdapter;
 import com.paulyung.pyphoto.adapter.viewholder.PhotoListViewHolder;
 import com.paulyung.pyphoto.bean.PhotoMsg;
-import com.paulyung.pyphoto.callback.PhotoOperate;
+import com.paulyung.pyphoto.callback.FileOperate;
 import com.paulyung.pyphoto.callback.SelectStateCheck;
 import com.paulyung.pyphoto.wrapper.RcyView;
 
@@ -33,7 +33,7 @@ public class PhotoListFragment extends BaseFragment {
     private PhotoListAdapter mAdapter;
     private List<PhotoMsg> mPhotoLists = new ArrayList<>();
     private SelectStateCheck mCheckState;
-    private PhotoOperate mPhotoOperate;
+    private FileOperate mPhotoOperate;
     private String coverName;
 
     public PhotoListFragment() {
@@ -53,9 +53,9 @@ public class PhotoListFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SelectStateCheck && context instanceof PhotoOperate) {
+        if (context instanceof SelectStateCheck && context instanceof FileOperate) {
             mCheckState = (SelectStateCheck) context;
-            mPhotoOperate = (PhotoOperate) context;
+            mPhotoOperate = (FileOperate) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement SelectStateCheck and mPhotoOperate interface");
@@ -92,7 +92,7 @@ public class PhotoListFragment extends BaseFragment {
             @Override
             public void onItemClick(View v, int position) {
                 if (mCheckState.getSelectState()) {//检查是否是选照片状态
-                    if (mPhotoOperate.addPhoto(mAdapter.getItem(position).getAbsolutePath())) {
+                    if (mPhotoOperate.addFile(mAdapter.getItem(position).getAbsolutePath())) {
                         //如果添加成功，则显示CheckBox为打勾状态
                         mAdapter.getItem(position).setCheck(true);
                     } else {
@@ -121,7 +121,7 @@ public class PhotoListFragment extends BaseFragment {
                         mAdapter.getItem(i).setShowCheckBox(true);
                     }
                     mAdapter.getItem(position).setCheck(true);
-                    mPhotoOperate.addPhoto(mAdapter.getItem(position).getAbsolutePath());
+                    mPhotoOperate.addFile(mAdapter.getItem(position).getAbsolutePath());
                     mAdapter.notifyDataSetChanged();
                     res = true;
                 }

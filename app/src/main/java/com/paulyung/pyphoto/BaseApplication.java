@@ -19,6 +19,7 @@ import java.util.List;
 public class BaseApplication extends Application {
     private static BaseApplication _INSTANCE;
 
+    //// TODO: 2016/12/2 暂时假设文件名不会重复，后续需要改为绝对路径作Key
     private MultiMap<String, PhotoMsg> mPhotoMsg;
     private List<PhotoCover> mCovers;
     private List<PhotoMsg> mTimeList;//按照时间排列的照片,会插入时间头，时间头是只带时间信息的PhotoMsg

@@ -70,6 +70,11 @@ public class TimeStateAdapter extends BaseAdapter<PhotoMsg> {
     }
 
     @Override
+    public synchronized void update(int position) {
+        super.update(getAllData().indexOf(mPhotoDatas.get(position)));
+    }
+
+    @Override
     public int getItemViewType(int position) {
         int res = super.getItemViewType(position);
         if (res == 0) {
@@ -80,5 +85,27 @@ public class TimeStateAdapter extends BaseAdapter<PhotoMsg> {
                 res = PHOTO_TYPE;
         }
         return res;
+    }
+
+    public PhotoMsg getPhotoItem(int p) {
+        return mPhotoDatas.get(p);
+    }
+
+    public int getPhotoSize() {
+        return mPhotoDatas.size();
+    }
+
+    //将CheckBox隐藏，并都置为false
+    public void clearCheckBoxStateAll() {
+        for (int i = 0; i < mPhotoDatas.size(); ++i) {
+            mPhotoDatas.get(i).setShowCheckBox(false);
+            mPhotoDatas.get(i).setCheck(false);
+        }
+        if (getDataSize() != 0)
+            notifyDataSetChanged();
+    }
+
+    public void synchronizedData() {
+        init();
     }
 }

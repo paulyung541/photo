@@ -14,7 +14,7 @@ import com.paulyung.pyphoto.BaseApplication;
 import com.paulyung.pyphoto.BundleTag;
 import com.paulyung.pyphoto.R;
 import com.paulyung.pyphoto.bean.PhotoMsg;
-import com.paulyung.pyphoto.callback.PhotoOperate;
+import com.paulyung.pyphoto.callback.FileOperate;
 import com.paulyung.pyphoto.callback.SelectStateCheck;
 import com.paulyung.pyphoto.fragment.BaseFragment;
 import com.paulyung.pyphoto.fragment.PhotoListFragment;
@@ -31,7 +31,7 @@ import java.util.List;
  * 点击相册后进入的照片列表
  */
 
-public class PhotoListActivity extends BaseActivity implements SelectStateCheck, PhotoOperate {
+public class PhotoListActivity extends BaseActivity implements SelectStateCheck, FileOperate {
     private FragmentManager mFragmentManager;
     private boolean isCheckState;
     private BaseFragment mFragment;
@@ -166,7 +166,7 @@ public class PhotoListActivity extends BaseActivity implements SelectStateCheck,
     }
 
     @Override
-    public boolean addPhoto(String imgFile) {
+    public boolean addFile(String imgFile) {
         boolean res = true;
         if (mSelectPhotos.contains(imgFile)) {
             mSelectPhotos.remove(imgFile);

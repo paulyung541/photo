@@ -60,6 +60,7 @@ public class MainViewActivity extends BaseActivity implements SelectStateCheck {
             menu.findItem(R.id.delete).setVisible(true).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         } else {
             menu.setGroupVisible(R.id.group, true);
+            menu.findItem(Integer.valueOf(mCurrentFragment.getTag())).setChecked(true);
             menu.findItem(R.id.delete).setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
@@ -74,7 +75,7 @@ public class MainViewActivity extends BaseActivity implements SelectStateCheck {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (isCheckState) {
-            onDeletePressed();//执行删除
+            onDeletePressed(mCurrentFragment.getTag());//执行删除
         } else {
             item.setChecked(true);
             cheackFragmentById(item.getItemId());
@@ -83,7 +84,7 @@ public class MainViewActivity extends BaseActivity implements SelectStateCheck {
     }
 
     //删除
-    protected void onDeletePressed() {
+    protected void onDeletePressed(String tag) {
 
     }
 
