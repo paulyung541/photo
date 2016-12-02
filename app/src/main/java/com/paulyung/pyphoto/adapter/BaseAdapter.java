@@ -100,7 +100,8 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
                     int p = viewHolder.getAdapterPosition();
                     if (mHeaderView != null)
                         p -= 1;
-                    mItemClickListener.onItemClick(v, p);
+                    int componentP = getComponentP(p);
+                    mItemClickListener.onItemClick(v, componentP);
                 }
             });
         }
@@ -111,11 +112,17 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
                     int p = viewHolder.getAdapterPosition();
                     if (mHeaderView != null)
                         p -= 1;
-                    return onItemLongClickListener.onItemLongClick(v, p);
+                    int componentP = getComponentP(p);
+                    return onItemLongClickListener.onItemLongClick(v, componentP);
                 }
             });
         }
         return viewHolder;
+    }
+
+    //如果mData中夹杂其它数据，则需要处理，让点击事件响应该相应的数据
+    protected int getComponentP(int position) {
+        return position;
     }
 
     @Override

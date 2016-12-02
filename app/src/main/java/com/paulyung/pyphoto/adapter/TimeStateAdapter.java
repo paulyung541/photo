@@ -8,6 +8,7 @@ import com.paulyung.pyphoto.adapter.viewholder.BaseViewHolder;
 import com.paulyung.pyphoto.adapter.viewholder.TimeStateViewHolder;
 import com.paulyung.pyphoto.bean.PhotoMsg;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,9 +19,19 @@ import java.util.List;
 public class TimeStateAdapter extends BaseAdapter<PhotoMsg> {
     private static final int TIME_TYPE = 0x01;
     private static final int PHOTO_TYPE = 0x02;
+    private List<PhotoMsg> mPhotoDatas = new ArrayList<>();
 
     public TimeStateAdapter(Context context, List<PhotoMsg> datas) {
         super(context, datas);
+        init();
+    }
+
+    private void init() {
+        for (int i = 0; i < getDataSize(); i++) {
+            PhotoMsg msg = getItem(i);
+            if (msg.getAbsolutePath() != null)
+                mPhotoDatas.add(msg);
+        }
     }
 
     public class TimeLookUp extends GridSpanSizeLookup {
@@ -54,10 +65,14 @@ public class TimeStateAdapter extends BaseAdapter<PhotoMsg> {
     }
 
     @Override
+    protected int getComponentP(int position) {
+        return mPhotoDatas.indexOf(getItem(position));
+    }
+
+    @Override
     public int getItemViewType(int position) {
         int res = super.getItemViewType(position);
         if (res == 0) {
-            // TODO: 2016/12/1 自己处理
             PhotoMsg msg = getItem(position);
             if (msg.getAbsolutePath() == null)
                 res = TIME_TYPE;

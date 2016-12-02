@@ -102,6 +102,7 @@ public class PhotoListFragment extends BaseFragment {
                 } else {
                     //// TODO: 2016/11/24 点击查看大图
                     Intent intent = new Intent(getActivity(), ImageWatchActivity.class);
+                    intent.putExtra(BundleTag.WITCH_TO_WATCH, ImageWatchActivity.PHOTO_LIST_WATCH);
                     intent.putExtra(BundleTag.WATCH_IMAGE_INDEX, position);
                     intent.putExtra(BundleTag.COVER_NAME_2, coverName);
                     startActivity(intent);
