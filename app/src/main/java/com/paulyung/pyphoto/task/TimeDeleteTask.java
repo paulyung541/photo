@@ -93,7 +93,7 @@ public class TimeDeleteTask extends AsyncTask<Void, Void, Void> {
                         if (timeList.get(i).getAbsolutePath() != null &&
                                 timeList.get(i).getAbsolutePath().equals(deleteList.get(j))) {
                             timeList.remove(i);
-                            i--;
+                            break;
                         }
                     }
                 }

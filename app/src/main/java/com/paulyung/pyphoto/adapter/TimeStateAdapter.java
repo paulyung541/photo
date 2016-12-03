@@ -23,15 +23,18 @@ public class TimeStateAdapter extends BaseAdapter<PhotoMsg> {
 
     public TimeStateAdapter(Context context, List<PhotoMsg> datas) {
         super(context, datas);
-        init();
+        reset();
     }
 
-    private void init() {
+    private void reset() {
+        if (!mPhotoDatas.isEmpty())
+            mPhotoDatas.clear();
         for (int i = 0; i < getDataSize(); i++) {
             PhotoMsg msg = getItem(i);
             if (msg.getAbsolutePath() != null)
                 mPhotoDatas.add(msg);
         }
+
     }
 
     public class TimeLookUp extends GridSpanSizeLookup {
@@ -106,6 +109,6 @@ public class TimeStateAdapter extends BaseAdapter<PhotoMsg> {
     }
 
     public void synchronizedData() {
-        init();
+        reset();
     }
 }
