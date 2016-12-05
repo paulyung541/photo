@@ -63,13 +63,15 @@ public class DBHelper {
                     }
 
                     String time = null;
-                    String lon = null;
-                    String lat = null;
+                    float lon = 0.0f;
+                    float lat = 0.0f;
                     String city = null;
                     try {
                         ExifInterface exif = new ExifInterface(absolutePath);
-                        lon = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-                        lat = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+                        float[] output = new float[2];
+                        exif.getLatLong(output);
+                        lon = output[1];
+                        lat = output[0];
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -88,7 +90,7 @@ public class DBHelper {
                 for (PhotoMsg msg : tmpTimeList) {
                     if (!StringUtils.getSubString(0, 10, msg.getTime()).equals(preTime)) {
                         timeList.add(new PhotoMsg(null, null, null, StringUtils.getSubString(0, 10,
-                                StringUtils.getSubString(0, 10, msg.getTime())), null, null, null));
+                                StringUtils.getSubString(0, 10, msg.getTime())), 0.0f, 0.0f, null));
                     }
                     timeList.add(msg);
                     preTime = StringUtils.getSubString(0, 10, msg.getTime());
@@ -103,7 +105,7 @@ public class DBHelper {
                     PhotoMsg msg = map.get(parent).get(map.get(parent).size() - 1);
                     File file = new File(msg.getAbsolutePath()).getParentFile();
                     PhotoCover cover = new PhotoCover(file.getAbsolutePath(), msg.getAbsolutePath(), file.getName(), map.get(parent).size());
-                    if (cover.getCoverName().equals("Camera")) {//Camera放在最前面
+                    if (cover.getCoverName().equalsIgnoreCase("Camera")) {//Camera放在最前面
                         cover.setCoverName("相机");
                         list.add(cover);
                         if (!list.isEmpty() && list.indexOf(cover) != 0) {
@@ -116,6 +118,9 @@ public class DBHelper {
                         list.add(cover);
                     }
                 }
+
+                List<PhotoMsg> positionList = new LinkedList<>(map.get("Camera"));
+                NetUtil.getCitys(positionList);
                 return null;
             }
 

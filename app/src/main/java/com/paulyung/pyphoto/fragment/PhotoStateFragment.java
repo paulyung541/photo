@@ -81,6 +81,13 @@ public class PhotoStateFragment extends BaseFragment implements OnPhotoMsgBackLi
                 })
                 .enableDialog(false)
                 .cheackAndRequest(getActivity(), new String[]{
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_NETWORK_STATE,
+                        Manifest.permission.ACCESS_WIFI_STATE,
+                        Manifest.permission.CHANGE_WIFI_STATE,
+                        Manifest.permission.INTERNET,
+                        Manifest.permission.READ_PHONE_STATE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS

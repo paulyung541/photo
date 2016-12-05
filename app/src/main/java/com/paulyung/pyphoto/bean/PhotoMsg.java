@@ -12,14 +12,15 @@ public class PhotoMsg implements Serializable {
     private String simpleName;
     private String parentName;//目录名（只是名字）
     private String time;
-    private String lon;//经度
-    private String lat;//纬度
-    private String city;
+    private float lon;//经度
+    private float lat;//纬度
+    private String location;//详细地址信息 省+市+区+乡镇+街道+门牌号
+    private String city;//省 市
 
     private boolean isCheck;//是否选中状态(PS：此为界面信息，放在这里方便OnBindView里根据position进行设置viewholder)
     private boolean isShowCheckBox;//是否显示CheckBox
 
-    public PhotoMsg(String absolutePath, String simpleName,String parentName, String time, String lon, String lat, String city) {
+    public PhotoMsg(String absolutePath, String simpleName,String parentName, String time, float lon, float lat, String city) {
         this.absolutePath = absolutePath;
         this.simpleName = simpleName;
         this.parentName = parentName;
@@ -61,19 +62,19 @@ public class PhotoMsg implements Serializable {
         this.time = time;
     }
 
-    public String getLon() {
+    public float getLon() {
         return lon;
     }
 
-    public void setLon(String lon) {
+    public void setLon(float lon) {
         this.lon = lon;
     }
 
-    public String getLat() {
+    public float getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(float lat) {
         this.lat = lat;
     }
 
@@ -99,5 +100,13 @@ public class PhotoMsg implements Serializable {
 
     public void setShowCheckBox(boolean showCheckBox) {
         isShowCheckBox = showCheckBox;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
