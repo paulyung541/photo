@@ -35,7 +35,7 @@ public class PhotoListFragment extends BaseFragment {
     private SelectStateCheck mCheckState;
     private FileOperate mPhotoOperate;
     private String coverName;
-
+    private String witch;
     public PhotoListFragment() {
     }
 
@@ -66,9 +66,17 @@ public class PhotoListFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         coverName = getArguments().getString(BundleTag.COVER_NAME);
-        if (coverName.equals("相机"))
-            coverName = "Camera";
-        mPhotoLists.addAll(BaseApplication.getInstance().getPhotoMsg().get(coverName));
+        witch = getArguments().getString(BundleTag.WITCH_TO_LIST);
+        switch (witch) {
+            case "photo_state_list":
+                if (coverName.equals("相机"))
+                    coverName = "Camera";
+                mPhotoLists.addAll(BaseApplication.getInstance().getPhotoMsg().get(coverName));
+                break;
+            case "position_cover_list":
+                mPhotoLists.addAll(BaseApplication.getInstance().getPositionMap().get(coverName));
+                break;
+        }
         Collections.reverse(mPhotoLists);//反转顺序，让时间最近的排在前面
     }
 
@@ -102,7 +110,11 @@ public class PhotoListFragment extends BaseFragment {
                 } else {
                     //// TODO: 2016/11/24 点击查看大图
                     Intent intent = new Intent(getActivity(), ImageWatchActivity.class);
-                    intent.putExtra(BundleTag.WITCH_TO_WATCH, ImageWatchActivity.PHOTO_LIST_WATCH);
+                    if (witch.equals("photo_state_list")) {
+                        intent.putExtra(BundleTag.WITCH_TO_WATCH, ImageWatchActivity.PHOTO_LIST_WATCH);
+                    } else if (witch.equals("position_cover_list")) {
+                        intent.putExtra(BundleTag.WITCH_TO_WATCH, ImageWatchActivity.POSITION_WATCH);
+                    }
                     intent.putExtra(BundleTag.WATCH_IMAGE_INDEX, position);
                     intent.putExtra(BundleTag.COVER_NAME_2, coverName);
                     startActivity(intent);

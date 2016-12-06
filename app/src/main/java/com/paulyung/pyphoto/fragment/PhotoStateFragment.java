@@ -116,6 +116,7 @@ public class PhotoStateFragment extends BaseFragment implements OnPhotoMsgBackLi
                     intent.putExtra(BundleTag.PHOTO_STATE_FRAGMENT_WIDTH, v.getWidth());//item宽
                     intent.putExtra(BundleTag.PHOTO_STATE_FRAGMENT_HEIGHT, v.getHeight());//item高
                     intent.putExtra(BundleTag.COVER_NAME, adapter.getItem(position).getCoverName());//相册名
+                    intent.putExtra(BundleTag.WITCH_TO_LIST, "photo_state_list");
                     startActivity(intent);
                 }
             }

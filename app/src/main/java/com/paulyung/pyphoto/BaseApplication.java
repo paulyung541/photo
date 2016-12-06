@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.paulyung.pyphoto.bean.PhotoCover;
 import com.paulyung.pyphoto.bean.PhotoMsg;
+import com.paulyung.pyphoto.bean.PositionCover;
 import com.paulyung.pyphoto.utils.MultiMap;
 import com.paulyung.pyphoto.utils.PYLog;
 
@@ -23,6 +24,8 @@ public class BaseApplication extends Application {
     private MultiMap<String, PhotoMsg> mPhotoMsg;
     private List<PhotoCover> mCovers;
     private List<PhotoMsg> mTimeList;//按照时间排列的照片,会插入时间头，时间头是只带时间信息的PhotoMsg
+    private MultiMap<String, PhotoMsg> mPositionMap;// <地址，照片信息>
+    private List<PositionCover> mPositionCoverList;//地址相册列表
 
     public synchronized static BaseApplication getInstance() {
         return _INSTANCE;
@@ -37,6 +40,8 @@ public class BaseApplication extends Application {
         mPhotoMsg = new MultiMap<>();
         mCovers = new ArrayList<>();
         mTimeList = new ArrayList<>();
+        mPositionMap = new MultiMap<>();
+        mPositionCoverList = new ArrayList<>();
     }
 
     public void showToast(String msg) {
@@ -73,5 +78,13 @@ public class BaseApplication extends Application {
 
     public List<PhotoMsg> getTimeList() {
         return mTimeList;
+    }
+
+    public MultiMap<String, PhotoMsg> getPositionMap() {
+        return mPositionMap;
+    }
+
+    public List<PositionCover> getPositionCoverList() {
+        return mPositionCoverList;
     }
 }

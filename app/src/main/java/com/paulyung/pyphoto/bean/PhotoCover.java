@@ -18,8 +18,6 @@ public class PhotoCover {
         this.coverAbsolutePath = coverAbsolutePath;
         this.coverName = coverName;
         this.size = size;
-        this.isCheck = isCheck;
-        this.isShowCheckBox = isShowCheckBox;
     }
 
     public String getCover() {

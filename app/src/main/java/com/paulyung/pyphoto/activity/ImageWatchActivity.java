@@ -74,9 +74,10 @@ public class ImageWatchActivity extends BaseActivity {
     protected void beforeSetView() {
         Intent intent = getIntent();
         firstP = intent.getIntExtra(BundleTag.WATCH_IMAGE_INDEX, -1);
+        String coverName = "";
         switch (intent.getStringExtra(BundleTag.WITCH_TO_WATCH)) {
             case PHOTO_LIST_WATCH://照片列表进入
-                String coverName = intent.getStringExtra(BundleTag.COVER_NAME_2);
+                coverName = intent.getStringExtra(BundleTag.COVER_NAME_2);
                 mDatas.addAll(BaseApplication.getInstance().getPhotoMsg().get(coverName));
                 Collections.reverse(mDatas);
                 break;
@@ -84,6 +85,9 @@ public class ImageWatchActivity extends BaseActivity {
                 selectShow(intent);
                 break;
             case POSITION_WATCH://地址照片列表进入
+                coverName = intent.getStringExtra(BundleTag.COVER_NAME_2);
+                mDatas.addAll(BaseApplication.getInstance().getPositionMap().get(coverName));
+                Collections.reverse(mDatas);
                 break;
         }
     }

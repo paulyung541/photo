@@ -44,7 +44,7 @@ public class PhotoViewHolder extends BaseViewHolder<PhotoCover> {
 
     @Override
     public void setData(PhotoCover data) {
-        int maxSize = Math.min(imageView.getLayoutParams().height, 200);
+        int maxSize = Math.min(imageView.getLayoutParams().height, 400);
 
         Glide.with(getContext())
                 .load(data.getCoverAbsolutePath())

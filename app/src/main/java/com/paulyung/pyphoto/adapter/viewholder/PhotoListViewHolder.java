@@ -40,7 +40,7 @@ public class PhotoListViewHolder extends BaseViewHolder<PhotoMsg> {
 
     @Override
     public void setData(PhotoMsg data) {
-        int maxSize = Math.min(params.height, params.height);
+        int maxSize = Math.min(params.height, 300);
 
         Glide.with(getContext())
                 .load(data.getAbsolutePath())

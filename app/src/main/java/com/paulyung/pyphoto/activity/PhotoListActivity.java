@@ -1,26 +1,19 @@
 package com.paulyung.pyphoto.activity;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.paulyung.pyphoto.BaseApplication;
 import com.paulyung.pyphoto.BundleTag;
 import com.paulyung.pyphoto.R;
-import com.paulyung.pyphoto.bean.PhotoMsg;
 import com.paulyung.pyphoto.callback.FileOperate;
 import com.paulyung.pyphoto.callback.SelectStateCheck;
 import com.paulyung.pyphoto.fragment.BaseFragment;
 import com.paulyung.pyphoto.fragment.PhotoListFragment;
-import com.paulyung.pyphoto.utils.DBHelper;
-import com.paulyung.pyphoto.utils.DialogHelp;
-import com.paulyung.pyphoto.utils.FileHelper;
+import com.paulyung.pyphoto.task.PhotoListDeleteTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +31,7 @@ public class PhotoListActivity extends BaseActivity implements SelectStateCheck,
     //被选中的照片
     private List<String> mSelectPhotos = new ArrayList<>();
     private String title;//标题
-    private Handler handler = new Handler();
-    private int DELAY_MS = 100;//删除一张照片延时100ms，主要为了好看
-
+    private String witch;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_photo_list;
@@ -48,6 +39,7 @@ public class PhotoListActivity extends BaseActivity implements SelectStateCheck,
 
     @Override
     protected void beforeSetView() {
+        witch = getIntent().getStringExtra(BundleTag.WITCH_TO_LIST);
         mFragmentManager = getSupportFragmentManager();
     }
 
@@ -55,6 +47,7 @@ public class PhotoListActivity extends BaseActivity implements SelectStateCheck,
     protected void initView() {
         Bundle bundle = new Bundle();
         bundle.putString(BundleTag.COVER_NAME, title);
+        bundle.putString(BundleTag.WITCH_TO_LIST, witch);
         mFragment = PhotoListFragment.getInstance(bundle);
         mFragmentManager.beginTransaction()
                 .add(R.id.lay_container, mFragment, getClass().getSimpleName()).commit();
@@ -120,49 +113,14 @@ public class PhotoListActivity extends BaseActivity implements SelectStateCheck,
 
     //点击删除
     private void onDeletePressed() {
-        final ProgressDialog dialog = DialogHelp.getWaitDialog(this, getResources().getString(R.string.do_delete));
-        new AsyncTask<Void, Void, Void>() {
-            private List<String> deleteList;//已删除的文件列表
 
-            @Override
-            protected void onPreExecute() {
-                dialog.show();
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                deleteList = FileHelper.deleteFiles(mSelectPhotos);
-                //ACTION_MEDIA_SCANNER_SCAN_FILE 发这个广播只会扫描单个文件，不能是dir
-                DBHelper.updateFileByPath(deleteList);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog.dismiss();
-                        setSelectState(false);
-                        String tmpStr = title;
-                        if (tmpStr.equals("相机"))
-                            tmpStr = "Camera";
-                        List<PhotoMsg> list = BaseApplication.getInstance().getPhotoMsg().get(tmpStr);
-                        for (int i = 0; i < list.size(); ++i) {
-                            for (int j = 0; j < deleteList.size(); ++j) {
-                                if (list.get(i).getAbsolutePath().equals(deleteList.get(j))) {
-                                    list.remove(i);
-                                    i -= 1;
-                                    break;
-                                }
-                            }
-                        }
-                        mFragment.onFileDelete();
-                    }
-                }, deleteList.size() * DELAY_MS);
-            }
-        }.execute();
+        switch (witch) {
+            case "photo_state_list":
+                new PhotoListDeleteTask(this, mFragment, mSelectPhotos, title).execute();
+                break;
+            case "position_cover_list":
+                break;
+        }
     }
 
     @Override

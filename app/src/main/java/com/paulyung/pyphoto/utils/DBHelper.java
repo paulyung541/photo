@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import com.paulyung.pyphoto.BaseApplication;
 import com.paulyung.pyphoto.bean.PhotoCover;
 import com.paulyung.pyphoto.bean.PhotoMsg;
+import com.paulyung.pyphoto.bean.PositionCover;
 import com.paulyung.pyphoto.callback.OnPhotoMsgBackListener;
 
 import java.io.File;
@@ -118,9 +119,24 @@ public class DBHelper {
                         list.add(cover);
                     }
                 }
+                if (map.get("Camera") != null) {
+                    List<PhotoMsg> positionList = new LinkedList<>(map.get("Camera"));
+                    NetUtil.getCitys(positionList);
+                    List<PhotoMsg> cameraList = map.get("Camera");
 
-                List<PhotoMsg> positionList = new LinkedList<>(map.get("Camera"));
-                NetUtil.getCitys(positionList);
+                    MultiMap<String, PhotoMsg> posMap = BaseApplication.getInstance().getPositionMap();
+                    for (int i = 0; i < cameraList.size(); ++i) {
+                        PhotoMsg msg = cameraList.get(i);
+                        posMap.put(msg.getCity(), msg);
+                    }
+                    List<PositionCover> positionCovers = BaseApplication.getInstance().getPositionCoverList();
+                    Set<String> keys = posMap.keySet();
+                    for (String key : keys) {
+                        List<PhotoMsg> msgs = posMap.get(key);
+                        PositionCover pCover = new PositionCover(key, msgs.get(0).getAbsolutePath(), msgs.size());
+                        positionCovers.add(pCover);
+                    }
+                }
                 return null;
             }
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PYPhoto</string>
+    <string name="app_name">小小相册</string>
     <string name="my_photo">我的相册</string>
     <string name="photo_state">相册</string>
     <string name="time_state">时间</string>
