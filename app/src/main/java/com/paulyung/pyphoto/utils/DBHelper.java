@@ -14,6 +14,7 @@ import com.paulyung.pyphoto.bean.PhotoCover;
 import com.paulyung.pyphoto.bean.PhotoMsg;
 import com.paulyung.pyphoto.bean.PositionCover;
 import com.paulyung.pyphoto.callback.OnPhotoMsgBackListener;
+import com.paulyung.pyphoto.task.PositionScanTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -119,24 +120,6 @@ public class DBHelper {
                         list.add(cover);
                     }
                 }
-                if (map.get("Camera") != null) {
-                    List<PhotoMsg> positionList = new LinkedList<>(map.get("Camera"));
-                    NetUtil.getCitys(positionList);
-                    List<PhotoMsg> cameraList = map.get("Camera");
-
-                    MultiMap<String, PhotoMsg> posMap = BaseApplication.getInstance().getPositionMap();
-                    for (int i = 0; i < cameraList.size(); ++i) {
-                        PhotoMsg msg = cameraList.get(i);
-                        posMap.put(msg.getCity(), msg);
-                    }
-                    List<PositionCover> positionCovers = BaseApplication.getInstance().getPositionCoverList();
-                    Set<String> keys = posMap.keySet();
-                    for (String key : keys) {
-                        List<PhotoMsg> msgs = posMap.get(key);
-                        PositionCover pCover = new PositionCover(key, msgs.get(0).getAbsolutePath(), msgs.size());
-                        positionCovers.add(pCover);
-                    }
-                }
                 return null;
             }
 
@@ -144,8 +127,35 @@ public class DBHelper {
             protected void onPostExecute(Void notthing) {
                 if (scanListener != null)
                     scanListener.onAllPhotoGet();
+                new PositionScanTask().execute();
             }
         }.execute();
+    }
+
+    public static void savePositionPhoto() {
+        MultiMap<String, PhotoMsg> map = BaseApplication.getInstance().getPhotoMsg();
+        if (map.get("Camera") != null) {
+            List<PhotoMsg> positionList = new LinkedList<>(map.get("Camera"));
+            NetUtil.getCitys(positionList);
+            List<PhotoMsg> cameraList = map.get("Camera");
+
+            MultiMap<String, PhotoMsg> posMap = BaseApplication.getInstance().getPositionMap();
+            if (!posMap.isEmpty())
+                return;//// TODO: 2016/12/7 如果第一次没有获取全，则会有bug
+            for (int i = 0; i < cameraList.size(); ++i) {
+                PhotoMsg msg = cameraList.get(i);
+                posMap.put(msg.getCity(), msg);
+            }
+            List<PositionCover> positionCovers = BaseApplication.getInstance().getPositionCoverList();
+            if (!positionCovers.isEmpty())
+                positionCovers.clear();
+            Set<String> keys = posMap.keySet();
+            for (String key : keys) {
+                List<PhotoMsg> msgs = posMap.get(key);
+                PositionCover pCover = new PositionCover(key, msgs.get(msgs.size() - 1).getAbsolutePath(), msgs.size());
+                positionCovers.add(pCover);
+            }
+        }
     }
 
     public static void updateFileByPath(List<String> filePathList) {

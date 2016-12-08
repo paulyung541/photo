@@ -42,6 +42,9 @@
         <activity
             android:name=".activity.ImageWatchActivity"
             android:theme="@style/ImageWhathTheme"/>
+        <activity
+            android:name=".activity.PhotoDetailActivity"
+            android:theme="@style/DetailTheme"/>
     </application>
 
 </manifest>

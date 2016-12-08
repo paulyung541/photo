@@ -9,12 +9,10 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="DetailTheme" parent="AppTheme">
-        <!--背景透明-->
-        <!--<item name="android:windowIsTranslucent">true</item>-->
-        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
-        <!--无进入动画-->
-        <item name="android:windowAnimationStyle">@null</item>
+    <style name="DetailTheme" parent="ImageWhathTheme">
+        背景透明
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <style name="ImageWhathTheme" parent="AppTheme">

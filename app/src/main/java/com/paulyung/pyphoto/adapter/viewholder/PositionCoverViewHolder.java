@@ -37,7 +37,7 @@ public class PositionCoverViewHolder extends BaseViewHolder<PositionCover> {
     public void setData(PositionCover data) {
         Glide.with(context)
                 .load(data.getCoverImagePath())
-                .override(300, 300)
+                .override(400, 400)
                 .into(imageView);
         textView.setText(data.getTitle() + " (" + data.getSize() + ')');
     }

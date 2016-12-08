@@ -80,13 +80,13 @@ public class PhotoViewPagerAdapter extends PagerAdapter {
 
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
-//        直接加载大图太耗内存，如果用户一直滑动，则没必要加载大图，如果用户停留超过1s，则加载大图
+//        直接加载大图太耗内存，如果用户一直滑动，则没必要加载大图，如果用户停留超过0.5s，则加载大图
         if (mCurrentPositio != position) {
             mCurrentPositio = position;
             Message msg = handler.obtainMessage();
             msg.obj = object;
             msg.arg1 = position;
-            handler.sendMessageDelayed(msg, 300);
+            handler.sendMessageDelayed(msg, 500);
         }
     }
 

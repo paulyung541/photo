@@ -6,13 +6,14 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ProgressBar;
 
-import com.paulyung.pyphoto.BaseApplication;
 import com.paulyung.pyphoto.BundleTag;
 import com.paulyung.pyphoto.R;
 import com.paulyung.pyphoto.activity.PhotoListActivity;
 import com.paulyung.pyphoto.adapter.BaseAdapter;
 import com.paulyung.pyphoto.adapter.PositionCoverAdapter;
+import com.paulyung.pyphoto.task.PositionScanTask;
 import com.paulyung.pyphoto.wrapper.RcyView;
 
 /**
@@ -22,6 +23,7 @@ import com.paulyung.pyphoto.wrapper.RcyView;
 
 public class PositionStateFragment extends BaseFragment {
     private RecyclerView mRyView;
+    private ProgressBar mProgress;
     private PositionCoverAdapter mAdapter;
 
     public PositionStateFragment() {
@@ -41,9 +43,10 @@ public class PositionStateFragment extends BaseFragment {
     @Override
     protected void initView() {
         RecyclerView mRyView = (RecyclerView) findViewById(R.id.ry_view);
+        mProgress = (ProgressBar) findViewById(R.id.progress);
         RcyView.normalInit(mRyView);
         mRyView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new PositionCoverAdapter(getActivity(), BaseApplication.getInstance().getPositionCoverList());
+        mAdapter = new PositionCoverAdapter(getActivity());
         mRyView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
@@ -54,5 +57,6 @@ public class PositionStateFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        new PositionScanTask(mAdapter, mRyView, mProgress).execute();
     }
 }
