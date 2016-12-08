@@ -1,5 +1,7 @@
 package com.paulyung.pyphoto.activity;
 
+import android.support.annotation.NonNull;
+
 import com.paulyung.pyphoto.AppManager;
 import com.paulyung.pyphoto.R;
 import com.paulyung.pyphoto.callback.FileOperate;
@@ -53,5 +55,10 @@ public class MainActivity extends MainViewActivity implements FileOperate {
                 //// TODO: 2016/12/2 AsyncTask
                 break;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        getCurrentFragment().onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

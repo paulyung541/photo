@@ -162,6 +162,7 @@ public class PhotoStateFragment extends BaseFragment implements OnPhotoMsgBackLi
         adapter.addAll(BaseApplication.getInstance().getCovers());
     }
 
+    //// TODO: 2016/12/8 Activity的该函数没有调用到Fragment的此函数，所以需要在MainActivity里面调用Fragment的此函数
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         PermissionManager.getInstants().handleRequest(getActivity(), requestCode, permissions, grantResults);
