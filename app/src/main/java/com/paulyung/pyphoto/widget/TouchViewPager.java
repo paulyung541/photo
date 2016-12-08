@@ -21,7 +21,7 @@ public class TouchViewPager extends ViewPager {
     private static final int MIN_MOVE_DIS = 30;
     private OnViewPagerClickListener mOnViewPagerClickListener;
     private long startTime;
-    private boolean canMove = false;
+    private boolean canMove;
     private float startX;
 
     public TouchViewPager(Context context) {

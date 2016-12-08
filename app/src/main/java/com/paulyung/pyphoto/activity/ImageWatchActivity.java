@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -39,6 +40,7 @@ public class ImageWatchActivity extends BaseActivity {
     private ObjectAnimator toolbarHide;
 
     private boolean isShow = true;
+    private boolean intoDetail;
 
     @BindView(R.id.view_pager)
     TouchViewPager viewPager;
@@ -46,6 +48,7 @@ public class ImageWatchActivity extends BaseActivity {
     private List<PhotoMsg> mDatas = new ArrayList<>();
     private int firstP;
     private PagerAdapter mAdapter;
+    private PhotoMsg mCurrentMsg;
 
     @Override
     protected int getLayoutId() {
@@ -55,6 +58,12 @@ public class ImageWatchActivity extends BaseActivity {
     @Override
     protected Toolbar getInitToolbar() {
         return toolbar = (Toolbar) findViewById(R.id.toolbar);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.photo_detail).setVisible(!intoDetail);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -70,12 +79,24 @@ public class ImageWatchActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.photo_detail:
+                resetMenu();
                 Intent intent = new Intent(this, PhotoDetailActivity.class);
+                intent.putExtra(BundleTag.IMAGE_DETAIL, mCurrentMsg);
                 startActivity(intent);
                 break;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void resetMenu() {
+        intoDetail = false;
+        supportInvalidateOptionsMenu();
+    }
+
+    @Override
+    protected void onRestart() {
+        resetMenu();
+        super.onRestart();
     }
 
     @Override
@@ -105,6 +126,7 @@ public class ImageWatchActivity extends BaseActivity {
                 Collections.reverse(mDatas);
                 break;
         }
+        mCurrentMsg = mDatas.get(firstP);
     }
 
     private void selectShow(Intent intent) {
@@ -130,6 +152,22 @@ public class ImageWatchActivity extends BaseActivity {
                 } else {
                     showToolbar();
                 }
+            }
+        });
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mCurrentMsg = mDatas.get(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
         initAnim();

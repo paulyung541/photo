@@ -13,4 +13,5 @@ public class BundleTag {
     public static final String COVER_NAME_2 = "PhotoListFragment_cover_name";
     public static final String WITCH_TO_WATCH = "witch_to_watch";
     public static final String WITCH_TO_LIST = "witch_to_list";
+    public static final String IMAGE_DETAIL = "image_detail";
 }

@@ -5,7 +5,8 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="gray1">#fcfcfc</color>
-    <color name="textColor">#2d2d34</color>
+    <color name="textColorLight">#2d2d34</color>
+    <color name="textColorDark">#ffffff</color>
     <color name="line">#e2e2e5</color>
 
     <color name="translucent_1">#1effffff</color>
