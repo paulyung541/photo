@@ -19,6 +19,28 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors {
+        wandoujia {}
+        baidu {}
+        app360 {}
+        uc {}
+        xiaomi {}
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                //这里修改apk文件名
+                def fileName = "ch_volunteerapp_${variant.productFlavors[0].name}-${defaultConfig.versionName}.apk"
+                output.outputFile = new File(outputFile.parent, fileName)
+            }
+        }
+    }
 }
 
 repositories {
@@ -33,7 +55,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile(name: 'actionanimatorset', ext: 'aar')
-
+    compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
@@ -46,4 +68,6 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+    compile 'com.umeng.analytics:analytics:latest.integration'//友盟统计
 }

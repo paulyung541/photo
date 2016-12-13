@@ -1,6 +1,5 @@
 package com.paulyung.pyphoto.activity;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
@@ -10,7 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.paul.actionanimset.Action;
 import com.paul.actionanimset.ActionAnimatorSet;
+import com.paul.actionanimset.AnimatorManager;
+import com.paul.actionanimset.DefaultAnimatorManager;
 import com.paulyung.pyphoto.BaseApplication;
 import com.paulyung.pyphoto.BundleTag;
 import com.paulyung.pyphoto.R;
@@ -36,11 +38,11 @@ public class ImageWatchActivity extends BaseActivity {
     public static final String TIME_WATCH = "time_watch";
     public static final String POSITION_WATCH = "position_watch";
     private ActionAnimatorSet animatorSet;
-    private ObjectAnimator toolbarShow;
-    private ObjectAnimator toolbarHide;
 
     private boolean isShow = true;
     private boolean intoDetail;
+
+    private AnimatorManager manager;
 
     @BindView(R.id.view_pager)
     TouchViewPager viewPager;
@@ -108,6 +110,7 @@ public class ImageWatchActivity extends BaseActivity {
 
     @Override
     protected void beforeSetView() {
+        manager = new DefaultAnimatorManager();
         Intent intent = getIntent();
         firstP = intent.getIntExtra(BundleTag.WATCH_IMAGE_INDEX, -1);
         String coverName = "";
@@ -174,63 +177,35 @@ public class ImageWatchActivity extends BaseActivity {
     }
 
     private void initAnim() {
-        toolbarShow = ObjectAnimator.ofFloat(toolbar, "translationY", -UIHelper.dpToPx(56), 0);
+        ObjectAnimator toolbarShow = ObjectAnimator.ofFloat(toolbar, "translationY", -UIHelper.dpToPx(56), 0);
         toolbarShow.setDuration(500);
-        toolbarHide = ObjectAnimator.ofFloat(toolbar, "translationY", -UIHelper.dpToPx(56));
+        ObjectAnimator toolbarHide = ObjectAnimator.ofFloat(toolbar, "translationY", -UIHelper.dpToPx(56));
         toolbarHide.setDuration(500);
 
-        toolbarShow.addListener(new Animator.AnimatorListener() {
+        manager.addAnimator(toolbarShow, "toolbarShow");
+        manager.setOnEndListener("toolbarShow", new Action() {
             @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
+            public void doAction() {
                 isShow = true;
             }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
         });
-
-        toolbarHide.addListener(new Animator.AnimatorListener() {
+        manager.addAnimator(toolbarHide, "toolbarHide");
+        manager.setOnEndListener("toolbarHide", new Action() {
             @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
+            public void doAction() {
                 isShow = false;
             }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
         });
+        manager.build();
     }
 
     private void showToolbar() {
-        if (!toolbarHide.isRunning())
-            toolbarShow.start();
+        if (!manager.getAnimator("toolbarHide").isRunning())
+            manager.start("toolbarShow");
     }
 
     private void hidetoolbar() {
-        if (!toolbarShow.isRunning())
-            toolbarHide.start();
+        if (!manager.getAnimator("toolbarShow").isRunning())
+            manager.start("toolbarHide");
     }
 }

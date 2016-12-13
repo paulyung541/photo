@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.paulyung.pyphoto.BuildConfig;
+import com.umeng.analytics.MobclickAgent;
+
 /**
  * Created by yang on 2016/11/15.
  * paulyung@outlook.com
@@ -52,5 +55,21 @@ public class BaseFragment extends Fragment {
      */
     public boolean onBackPressed() {
         return false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!BuildConfig.DEBUG) {
+            MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (!BuildConfig.DEBUG) {
+            MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        }
     }
 }

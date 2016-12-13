@@ -31,6 +31,13 @@
         <meta-data
             android:name="com.paulyung.pyphoto.PYGlideModule"
             android:value="GlideModule"/> <!-- Glide初始化配置 -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="584a0a6d717c19147d0018e2"/>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}"/>
+
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -8,6 +8,7 @@ import com.paulyung.pyphoto.bean.PhotoMsg;
 import com.paulyung.pyphoto.bean.PositionCover;
 import com.paulyung.pyphoto.utils.MultiMap;
 import com.paulyung.pyphoto.utils.PYLog;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,10 @@ public class BaseApplication extends Application {
         _INSTANCE = this;
 
         PYLog.setDebug(BuildConfig.DEBUG);
+        if (!BuildConfig.DEBUG) {
+            MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);//统计普通场景
+            MobclickAgent.openActivityDurationTrack(false);
+        }
         mPhotoMsg = new MultiMap<>();
         mCovers = new ArrayList<>();
         mTimeList = new ArrayList<>();
